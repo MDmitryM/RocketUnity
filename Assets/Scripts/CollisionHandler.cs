@@ -7,12 +7,20 @@ public class CollisionHandler : MonoBehaviour
     static private int _NEXT_SCENE_INDEX;
     static private int _PREVIOUS_SCENE_INDEX;
     static private int _FIRST_SCENE_INDEX;
+
+    private static bool _isAlive;
+
+    private ParticleHandler _particleHandler;
+
     private void Awake()
     {
+        _isAlive = true;
         _FIRST_SCENE_INDEX = 0;
         _CURRENT_SCENE_INDEX = SceneManager.GetActiveScene().buildIndex;
         _NEXT_SCENE_INDEX = _CURRENT_SCENE_INDEX + 1;
         _PREVIOUS_SCENE_INDEX = _CURRENT_SCENE_INDEX - 1;
+
+        _particleHandler = GetComponent<ParticleHandler>();
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -47,16 +55,31 @@ public class CollisionHandler : MonoBehaviour
 
     private void CrashSeq()
     {
+        SetAliveFalse();
+        _particleHandler.CrashingParticle();
         GetComponent<MovementHandler>().enabled = false;
         Invoke("ReloadScene",0.5f);
     }
 
     private void WinSeq()
     {
-        
-        GetComponent<MovementHandler>().enabled = false;
-        GetComponent<Rigidbody>().isKinematic = true;
-        Invoke("LoadNextScene", 1.5f);
+        if (IsAlive())
+        {
+            _particleHandler.WinningParticle();
+            GetComponent<MovementHandler>().enabled = false;
+            GetComponent<Rigidbody>().isKinematic = true;
+            Invoke("LoadNextScene", 1.5f);
+        }
+    }
+
+    public static void SetAliveFalse() 
+    {
+        _isAlive = false;
+    }
+
+    public static bool IsAlive() 
+    {
+        return _isAlive;
     }
 
     private void LoadNextScene()

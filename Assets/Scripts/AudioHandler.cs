@@ -18,23 +18,29 @@ public class AudioHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space) )
+        switch (CollisionHandler.IsAlive())
         {
-            //_audioSource.clip = _audioThurstClip;
-            if (!_audioSource.isPlaying ) 
-            {
-                
-                _audioSource.PlayOneShot(_audioThurstClip);
-            }
-        }
-        if (Input.GetKey (KeyCode.A) || (Input.GetKey(KeyCode.D)) ) 
-        {
-            //_audioSource.clip = _audioRotationClip;
-            if (!_audioSource.isPlaying)
-            {
-                
-                _audioSource.PlayOneShot(_audioRotationClip);
-            }
+            case true:
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    if (!_audioSource.isPlaying)
+                    {
+
+                        _audioSource.PlayOneShot(_audioThurstClip);
+                    }
+                }
+                if (Input.GetKey(KeyCode.A) || (Input.GetKey(KeyCode.D)))
+                {
+                    if (!_audioSource.isPlaying)
+                    {
+
+                        _audioSource.PlayOneShot(_audioRotationClip);
+                    }
+                }
+            break;
+            
+            case false:
+            break;
         }
     }
 
@@ -42,7 +48,6 @@ public class AudioHandler : MonoBehaviour
     {
         if ((collision.gameObject.tag == "Finish") && (_audioWinningClip != null))
         {
-            //_audioSource.clip = _audioWinningClip;
             _audioSource.PlayOneShot(_audioWinningClip);
         }
         else if ( (collision.gameObject.tag == "Enemy") && (_audioCrashClip != null)) 
