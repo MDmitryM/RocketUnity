@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class CollisionHandler : MonoBehaviour
 {
-    static private int _CURRENT_SCENE_INDEX;
-    static private int _NEXT_SCENE_INDEX;
-    static private int _PREVIOUS_SCENE_INDEX;
-    static private int _FIRST_SCENE_INDEX;
+     private int _currentSceneIndex;
+     private int _nextSceneIndex;
+     private int _previousSceneIndex;
+     private int _firstSceneIndex;
 
     private static bool _isAlive;
 
@@ -15,10 +15,10 @@ public class CollisionHandler : MonoBehaviour
     private void Awake()
     {
         _isAlive = true;
-        _FIRST_SCENE_INDEX = 0;
-        _CURRENT_SCENE_INDEX = SceneManager.GetActiveScene().buildIndex;
-        _NEXT_SCENE_INDEX = _CURRENT_SCENE_INDEX + 1;
-        _PREVIOUS_SCENE_INDEX = _CURRENT_SCENE_INDEX - 1;
+        _firstSceneIndex = 0;
+        _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        _nextSceneIndex = _currentSceneIndex + 1;
+        _previousSceneIndex = _currentSceneIndex - 1;
 
         _particleHandler = GetComponent<ParticleHandler>();
     }
@@ -84,9 +84,9 @@ public class CollisionHandler : MonoBehaviour
 
     private void LoadNextScene()
     {
-        if (_NEXT_SCENE_INDEX < SceneManager.sceneCountInBuildSettings)
+        if (_nextSceneIndex < SceneManager.sceneCountInBuildSettings)
         {
-            SceneManager.LoadScene(_NEXT_SCENE_INDEX, LoadSceneMode.Single);
+            SceneManager.LoadScene(_nextSceneIndex, LoadSceneMode.Single);
         }
         else
         {
@@ -94,14 +94,14 @@ public class CollisionHandler : MonoBehaviour
         }
     }
 
-    private static void LoadFirstScene()
+    private void LoadFirstScene()
     {
-        SceneManager.LoadScene(_FIRST_SCENE_INDEX, LoadSceneMode.Single);
+        SceneManager.LoadScene(_firstSceneIndex, LoadSceneMode.Single);
     }
 
     private void ReloadScene()
     {
-        SceneManager.LoadScene(_CURRENT_SCENE_INDEX, LoadSceneMode.Single);
+        SceneManager.LoadScene(_currentSceneIndex, LoadSceneMode.Single);
     }
 }
 
