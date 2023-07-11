@@ -4,23 +4,32 @@ using UnityEngine;
 
 public class MovementHandler : MonoBehaviour
 {
-    private Transform _transform;
+    
     [SerializeField] private Vector3 _rotationSpeed = new Vector3(0,0,75);
-
-
     [SerializeField]private float _thurstVol = 100f;
 
+    private Transform _transform;
 
     private Rigidbody _rigidbody;
 
+    private CapsuleCollider _collider;
+
     private ParticleHandler _particleHandler;
 
-    // Start is called before the first frame update
-    void Start()
+    private GameObject mySceneManagerObjectOnScene;
+    private MySceneManager mySceneManager;
+
+
+// Start is called before the first frame update
+void Start()
     {
         _transform = GetComponent<Transform>();
         _rigidbody = GetComponent<Rigidbody>();
+        _collider = GetComponent<CapsuleCollider>();
         _particleHandler = GetComponent<ParticleHandler>();
+
+        mySceneManagerObjectOnScene = GameObject.Find("MySceneManager");
+        if (mySceneManagerObjectOnScene != null) { mySceneManager = mySceneManagerObjectOnScene.GetComponent<MySceneManager>(); };
     }
 
     // Update is called once per frame
@@ -28,6 +37,7 @@ public class MovementHandler : MonoBehaviour
     {
         MovementThurst();
         MovementRotation();
+        CheatCodes();
     }
 
     private void MovementThurst()
@@ -75,5 +85,27 @@ public class MovementHandler : MonoBehaviour
         }
         _rigidbody.freezeRotation = false;
         
+    }
+
+    private void CheatCodes()
+    {
+        if (Input.GetKeyDown(KeyCode.N)) 
+        {
+            mySceneManager.LoadNextScene();
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            switch (_collider.enabled) 
+            {
+                case true:
+                    _collider.enabled = false;
+                    break;
+                case false:
+                    _collider.enabled = true;
+                    break;
+            }
+            
+        }
     }
 }
