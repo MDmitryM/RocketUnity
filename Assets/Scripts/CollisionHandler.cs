@@ -3,23 +3,15 @@ using UnityEngine;
 
 public class CollisionHandler : MonoBehaviour
 {
-     private int _currentSceneIndex;
-     private int _nextSceneIndex;
-     private int _previousSceneIndex;
-     private int _firstSceneIndex;
-
     private static bool _isAlive;
 
     private ParticleHandler _particleHandler;
 
+    //private MySceneManager _sceneManager;
+
     private void Awake()
     {
         _isAlive = true;
-        _firstSceneIndex = 0;
-        _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        _nextSceneIndex = _currentSceneIndex + 1;
-        _previousSceneIndex = _currentSceneIndex - 1;
-
         _particleHandler = GetComponent<ParticleHandler>();
     }
     private void OnCollisionEnter(Collision collision)
@@ -58,7 +50,9 @@ public class CollisionHandler : MonoBehaviour
         SetAliveFalse();
         _particleHandler.CrashingParticle();
         GetComponent<MovementHandler>().enabled = false;
-        Invoke("ReloadScene",0.5f);
+
+        StartCoroutine(MySceneManager.ReloadScene());
+
     }
 
     private void WinSeq()
@@ -68,7 +62,9 @@ public class CollisionHandler : MonoBehaviour
             _particleHandler.WinningParticle();
             GetComponent<MovementHandler>().enabled = false;
             GetComponent<Rigidbody>().isKinematic = true;
-            Invoke("LoadNextScene", 1.5f);
+
+
+            StartCoroutine(MySceneManager.LoadNextScene());
         }
     }
 
@@ -80,28 +76,6 @@ public class CollisionHandler : MonoBehaviour
     public static bool IsAlive() 
     {
         return _isAlive;
-    }
-
-    private void LoadNextScene()
-    {
-        if (_nextSceneIndex < SceneManager.sceneCountInBuildSettings)
-        {
-            SceneManager.LoadScene(_nextSceneIndex, LoadSceneMode.Single);
-        }
-        else
-        {
-            LoadFirstScene();
-        }
-    }
-
-    private void LoadFirstScene()
-    {
-        SceneManager.LoadScene(_firstSceneIndex, LoadSceneMode.Single);
-    }
-
-    private void ReloadScene()
-    {
-        SceneManager.LoadScene(_currentSceneIndex, LoadSceneMode.Single);
     }
 }
 
