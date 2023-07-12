@@ -7,19 +7,12 @@ public class CollisionHandler : MonoBehaviour
 
     private ParticleHandler _particleHandler;
 
-    private MySceneManager _sceneManager;
+    //private MySceneManager _sceneManager;
 
     private void Awake()
     {
         _isAlive = true;
         _particleHandler = GetComponent<ParticleHandler>();
-
-        GameObject sceneManagerObject = GameObject.Find("MySceneManager");
-
-        if (sceneManagerObject != null) 
-        {
-            _sceneManager = sceneManagerObject.GetComponent<MySceneManager>();
-        }
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -58,7 +51,7 @@ public class CollisionHandler : MonoBehaviour
         _particleHandler.CrashingParticle();
         GetComponent<MovementHandler>().enabled = false;
 
-        _sceneManager.Invoke( "ReloadScene", _sceneManager.DelayBeforeReloadLevel() );
+        StartCoroutine(MySceneManager.ReloadScene());
 
     }
 
@@ -69,7 +62,9 @@ public class CollisionHandler : MonoBehaviour
             _particleHandler.WinningParticle();
             GetComponent<MovementHandler>().enabled = false;
             GetComponent<Rigidbody>().isKinematic = true;
-            _sceneManager.Invoke( "LoadNextScene", _sceneManager.DelayBeforeLoadNextLevel() );
+
+
+            StartCoroutine(MySceneManager.LoadNextScene());
         }
     }
 

@@ -16,11 +16,6 @@ public class MovementHandler : MonoBehaviour
 
     private ParticleHandler _particleHandler;
 
-    private GameObject mySceneManagerObjectOnScene;
-    private MySceneManager mySceneManager;
-
-
-// Start is called before the first frame update
 void Start()
     {
         _transform = GetComponent<Transform>();
@@ -28,11 +23,8 @@ void Start()
         _collider = GetComponent<CapsuleCollider>();
         _particleHandler = GetComponent<ParticleHandler>();
 
-        mySceneManagerObjectOnScene = GameObject.Find("MySceneManager");
-        if (mySceneManagerObjectOnScene != null) { mySceneManager = mySceneManagerObjectOnScene.GetComponent<MySceneManager>(); };
     }
 
-    // Update is called once per frame
     void Update()
     {
         MovementThurst();
@@ -91,7 +83,7 @@ void Start()
     {
         if (Input.GetKeyDown(KeyCode.N)) 
         {
-            mySceneManager.LoadNextScene();
+            StartCoroutine(MySceneManager.LoadNextScene());
         }
 
         if (Input.GetKeyDown(KeyCode.C))
@@ -105,7 +97,6 @@ void Start()
                     _collider.enabled = true;
                     break;
             }
-            
         }
     }
 }
